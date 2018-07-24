@@ -1,16 +1,17 @@
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
 
-public class MainGUI extends Frame implements ActionListener {
+
+public class MainGUI {
+	public static final int MIN_ZOOM = 0;
+	public static final int MAX_ZOOM = 10;
+	private static int currentZoom = 5;
+	
 
 	public static void main(String[] args)
 	{
 		
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 }

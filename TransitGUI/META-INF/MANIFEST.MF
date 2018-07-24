@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Application-Name: JxBrowser
+Bundle-Description: JxBrowser 6.21 Chromium Windows 64-bit OSGi bundle
+Bundle-SymbolicName: com.teamdev.jxbrowser.chromium.internal.win64
+Implementation-Version: 6.21
+Bundle-ManifestVersion: 2
+Title: Chromium Windows 64-bit
+Export-Package: com.teamdev.jxbrowser.chromium.internal.res
+Bundle-Name: JxBrowser 6.21 Chromium Windows 64-bit
+Bundle-Version: 6.21
+Vendor: TeamDev Ltd.
+Permissions: all-permissions
+Codebase: *
+

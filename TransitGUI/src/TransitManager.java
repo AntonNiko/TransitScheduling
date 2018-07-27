@@ -34,13 +34,15 @@ import static javax.swing.GroupLayout.Alignment.*;
  
 public class TransitManager extends JFrame {
     public TransitManager() {
-        JLabel label = new JLabel("Find What:");;
-        JTextField textField = new JTextField();
+        JLabel usernameLabel = new JLabel("Username:");
+        JLabel passwordLabel = new JLabel("Password:");
+        JTextField usernameField = new JTextField();
+        JTextField passwordField = new JTextField();
         JCheckBox caseCheckBox = new JCheckBox("Match Case");
         JCheckBox wrapCheckBox = new JCheckBox("Wrap Around");
         JCheckBox wholeCheckBox = new JCheckBox("Whole Words");
         JCheckBox backCheckBox = new JCheckBox("Search Backwards");
-        JButton findButton = new JButton("Find");
+        JButton loginButton = new JButton("Login");
         JButton cancelButton = new JButton("Cancel");
  
         // remove redundant default border of check boxes - they would hinder
@@ -56,41 +58,40 @@ public class TransitManager extends JFrame {
         layout.setAutoCreateContainerGaps(true);
  
         layout.setHorizontalGroup(layout.createSequentialGroup()
-            .addComponent(label)
+            .addComponent(usernameLabel)
+            .addComponent(passwordLabel)
             .addGroup(layout.createParallelGroup(LEADING)
-                .addComponent(textField)
+                .addComponent(usernameField)
+                
                 .addGroup(layout.createSequentialGroup()
+                		
+                    .addGroup(layout.createParallelGroup(LEADING))
+                    	
                     .addGroup(layout.createParallelGroup(LEADING)
-                        .addComponent(caseCheckBox)
-                        .addComponent(wholeCheckBox))
-                    .addGroup(layout.createParallelGroup(LEADING)
-                        .addComponent(wrapCheckBox)
-                        .addComponent(backCheckBox))))
+                        )))
             .addGroup(layout.createParallelGroup(LEADING)
-                .addComponent(findButton)
-                .addComponent(cancelButton))
+                .addComponent(loginButton))
         );
         
-        layout.linkSize(SwingConstants.HORIZONTAL, findButton, cancelButton);
+        layout.linkSize(SwingConstants.HORIZONTAL, loginButton);
  
         layout.setVerticalGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(BASELINE)
-                .addComponent(label)
-                .addComponent(textField)
-                .addComponent(findButton))
+            
+        	.addGroup(layout.createParallelGroup(BASELINE)
+                .addComponent(usernameLabel)
+                .addComponent(usernameField)
+                .addComponent(loginButton))
             .addGroup(layout.createParallelGroup(LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGroup(layout.createParallelGroup(BASELINE)
-                        .addComponent(caseCheckBox)
-                        .addComponent(wrapCheckBox))
-                    .addGroup(layout.createParallelGroup(BASELINE)
-                        .addComponent(wholeCheckBox)
-                        .addComponent(backCheckBox)))
-                .addComponent(cancelButton))
+                    	.addComponent(passwordLabel))
+                    .addGroup(layout.createParallelGroup(BASELINE)))
+                )
         );
  
-        setTitle("Find");
+        setTitle("TransitManager");
         pack();
+        setSize(500, 800);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
      

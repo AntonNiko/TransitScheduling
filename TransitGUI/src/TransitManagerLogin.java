@@ -31,40 +31,45 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.awt.Component;
 import javax.swing.*;
 import static javax.swing.GroupLayout.Alignment.*;
- 
-public class TransitManager extends JFrame {
-    public TransitManager() {
+
+
+public class TransitManagerLogin extends JFrame {
+    public TransitManagerLogin() {
         JLabel usernameLabel = new JLabel("Username:");
         JLabel passwordLabel = new JLabel("Password:");
         JTextField usernameField = new JTextField();
-        JTextField passwordField = new JTextField();
-        JCheckBox caseCheckBox = new JCheckBox("Match Case");
-        JCheckBox wrapCheckBox = new JCheckBox("Wrap Around");
-        JCheckBox wholeCheckBox = new JCheckBox("Whole Words");
-        JCheckBox backCheckBox = new JCheckBox("Search Backwards");
+        JPasswordField passwordField = new JPasswordField();
         JButton loginButton = new JButton("Login");
         JButton cancelButton = new JButton("Cancel");
- 
+        
+        
+        // ActionListeners
+        loginButton.addActionListener(new ActionListener()
+        {
+        	public void actionPerformed(ActionEvent e)
+        	{
+        		// Authenticate user
+        		System.out.println(usernameField.getText());
+        		System.out.println(passwordField.getPassword());
+        	}
+   		});
+        
         // remove redundant default border of check boxes - they would hinder
         // correct spacing and aligning (maybe not needed on some look and feels)
-        caseCheckBox.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        wrapCheckBox.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        wholeCheckBox.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        backCheckBox.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
- 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
  
         layout.setHorizontalGroup(layout.createSequentialGroup()
-            .addComponent(usernameLabel)
-            .addComponent(passwordLabel)
+            .addGroup(layout.createParallelGroup(LEADING)
+                    .addComponent(usernameLabel)
+                    .addComponent(passwordLabel)	
+            		)
             .addGroup(layout.createParallelGroup(LEADING)
                 .addComponent(usernameField)
-                
+                .addComponent(passwordField)
                 .addGroup(layout.createSequentialGroup()
-                		
                     .addGroup(layout.createParallelGroup(LEADING))
                     	
                     .addGroup(layout.createParallelGroup(LEADING)
@@ -80,11 +85,13 @@ public class TransitManager extends JFrame {
         	.addGroup(layout.createParallelGroup(BASELINE)
                 .addComponent(usernameLabel)
                 .addComponent(usernameField)
+                
                 .addComponent(loginButton))
             .addGroup(layout.createParallelGroup(LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGroup(layout.createParallelGroup(BASELINE)
-                    	.addComponent(passwordLabel))
+                    	.addComponent(passwordLabel)
+                    	.addComponent(passwordField))
                     .addGroup(layout.createParallelGroup(BASELINE)))
                 )
         );
@@ -106,7 +113,7 @@ public class TransitManager extends JFrame {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                new TransitManager().setVisible(true);
+                new TransitManagerLogin().setVisible(true);
             }
         });
     }

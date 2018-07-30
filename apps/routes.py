@@ -1,4 +1,5 @@
 import csv
+import sys
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
 
@@ -57,7 +58,7 @@ def route_kml_generator(route):
 
     tree = ET.ElementTree(kml)
     tree.write("Route{}.kml".format(route))
-    
 
-route_kml_generator(12)
+if __name__ == "__main__":
+    route_kml_generator(int(sys.argv[1]))
     

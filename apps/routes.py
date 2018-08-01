@@ -14,7 +14,6 @@ def route_kml_generator(route):
         index = 0
         for row in csvreader:
             if index==0:
-                print
                 headers = row
             ## Only add row if corresponds to route being generated
             shape_id = row[0].split(".")

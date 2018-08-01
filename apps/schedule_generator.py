@@ -1,4 +1,5 @@
 import csv
+from node import Node
 
 PROJECT_ROOT_DATA_DIR = "data/"
 ROUTES_FILE = "routes_shape.csv"
@@ -13,6 +14,7 @@ class schedule_generator():
     stops = []
     buses = []
     connections = []
+    nodes = []
     frequency = []
     priority = []
 
@@ -22,7 +24,27 @@ class schedule_generator():
         self.loadBusesData()
         self.loadConnData()
         self.loadFreqData()
-    
+
+        self.loadNodes()
+
+    def loadNodes(self):
+        conn_id_col = self.connections[0].index("conn_id")
+        conn_name_col = self.connections[0].index("conn_name")
+        shape_id_col = self.connections[0].index("shape_id")
+        stop_id_col = self.connections[0].index("stop_id")
+        conn_time_arr_col = self.connections[0].index("conn_time_arr")
+        conn_time_dep_col = self.connections[0].index("conn_time_dep")
+        del self.connections[0]
+
+        current_conn_id = self.connections[0][conn_id_col]
+        conn_stops = []
+        for conn_row in self.connections:
+            if conn_row[conn_id_col] != current_conn_id:
+                current_node = Node(current_conn_id, conn_row[conn_name_col], conn_stops)
+                self.nodes.append(current_node)
+                conn_stops = []
+                current_conn_id = conn_row[conn_id_col]  
+            conn_stops.append(conn_row[stop_id_col])
 
     def loadRoutesData(self):
         route_dir = "../" + PROJECT_ROOT_DATA_DIR + "/" + ROUTES_FILE

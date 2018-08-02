@@ -44,7 +44,7 @@ class schedule_generator():
                 self.nodes.append(current_node)
                 conn_stops = []
                 current_conn_id = conn_row[conn_id_col]  
-            conn_stops.append(conn_row[stop_id_col])
+            conn_stops.append([conn_row[shape_id_col], conn_row[stop_id_col]])
 
     def loadRoutesData(self):
         route_dir = "../" + PROJECT_ROOT_DATA_DIR + "/" + ROUTES_FILE
@@ -89,3 +89,10 @@ class schedule_generator():
                 self.priority.append(row)
 
 gen = schedule_generator()
+print("Routes: ", len(gen.routes))
+print("Stops: ", len(gen.stops))
+print("Buses: ", len(gen.buses))
+print("Connections: ", gen.connections)
+print("Nodes: ", gen.nodes)
+print("Frequency: ", gen.frequency)
+print("Priority: ", gen.priority)

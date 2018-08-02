@@ -14,7 +14,7 @@ class Node():
         self.node_id = node_id
         self.node_name = node_name
         self.node_stops = node_stops
-
+        
         self.generateConnections()
 
     def generateConnections(self):

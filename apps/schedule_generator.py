@@ -1,5 +1,6 @@
-import csv
+import csv, json
 from node import Node
+from schedule_app import Schedule_Algorithm
 
 PROJECT_ROOT_DATA_DIR = "data/"
 ROUTES_FILE = "routes_shape.csv"
@@ -8,6 +9,7 @@ BUSES_FILE = "buses.csv"
 CONN_FILE = "connections.csv"
 FREQ_FILE = "frequency.csv"
 PRIORITY_FILE = "priority.csv"
+SCHEDULE_FILE = "schedule.json"
 
 class schedule_generator():
     routes = []
@@ -24,8 +26,16 @@ class schedule_generator():
         self.loadBusesData()
         self.loadConnData()
         self.loadFreqData()
+        self.loadPriorityData()
 
         self.loadNodes()
+        self.scheduleRoutes()
+
+
+    def scheduleRoutes(self):
+        self.algorithm = Schedule_Algorithm(self.routes, self.buses, self.nodes, self.frequency, self.priority)
+        self.algorithm.arrangeRoutes()
+        self.algorithm.generateSchedules("MF")
 
     def loadNodes(self):
         conn_id_col = self.connections[0].index("conn_id")
@@ -89,10 +99,4 @@ class schedule_generator():
                 self.priority.append(row)
 
 gen = schedule_generator()
-print("Routes: ", len(gen.routes))
-print("Stops: ", len(gen.stops))
-print("Buses: ", len(gen.buses))
-print("Connections: ", gen.connections)
-print("Nodes: ", gen.nodes)
-print("Frequency: ", gen.frequency)
-print("Priority: ", gen.priority)
+

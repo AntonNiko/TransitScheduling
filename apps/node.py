@@ -23,7 +23,7 @@ class Node():
         for i in range(len(pair_combinations)):
             self.connections[i] = pair_combinations[i]
             
-            
+          
         
         
         

@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from datetime import datetime
+from datetime import datetime, time, timedelta
 
 class Schedule_Algorithm():
     START_DAY_HOUR = 3 ## Hour of day to start scheduling bus routes
@@ -55,20 +55,21 @@ class Schedule_Algorithm():
                 trip_id = str("%s%04d"% (current_route, trip_id_num))
 
                 ## With current trip ID, generate a trip, listing all the stop times for the route
-                
+                self.generateTrip(current_route, trip_id, current_hour, trip_minute)
             ## Break out of loop once after 24 hours past day start hour
             if count == 23:
                 break
             count+=1
             current_hour+=1
 
-        print(self.routes_schedules)
-
-
-    def generateTrip(self, current_route, trip_id):
+    def generateTrip(self, current_route, trip_id, current_hour, trip_minute):
         self.routes_schedules[current_route][trip_id] = {}
+        
+        ## Generate time for first stop
+        trip_time = datetime(2000, 1, 1, current_hour, trip_minute, 0)
         for route_stop in self.routes_stops[current_route]:
-            pass
+            trip_time+= timedelta(seconds=int(route_stop[1]))
+            self.routes_schedules[current_route][trip_id][route_stop[0]] = str(trip_time.time())
 
     def calculateFrequencyMinutes(self, frequency, shift_min):
         if frequency > 60 or frequency < 1:

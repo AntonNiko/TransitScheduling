@@ -1,4 +1,4 @@
-from itertools import combinations
+from itertools import permutations
 import csv
 
 PROJECT_ROOT_DATA_DIR = "data/"
@@ -19,11 +19,13 @@ class Node():
 
     def generateConnections(self):
         ## Method which generates a connection between every stops in the node
-        self.connections = list(combinations(self.node_stops, 2))
+        self.connections = list(permutations(self.node_stops, 2))
 
     def evaluateConnectionTime(self, trips):
         print("Evaluating Node: {} --- {}".format(self.node_id, self.node_name))
-        pass
+        for connection in self.connections:
+            print(connection)
+        
             
           
         

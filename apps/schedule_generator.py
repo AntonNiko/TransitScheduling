@@ -30,6 +30,7 @@ class schedule_generator():
 
         self.loadNodes()
         self.scheduleRoutes()
+        self.saveSchedule()
 
 
     def scheduleRoutes(self):
@@ -37,6 +38,12 @@ class schedule_generator():
         self.algorithm.arrangeRoutes()
         self.algorithm.generateSchedules("MF")
         self.algorithm.evaluateNodeConnections()
+
+    def saveSchedule(self):
+        data = self.algorithm.routes_schedules
+        with open("schedule_output.json","w") as f:
+            json.dump(data, f, indent=True)
+        
 
     def loadNodes(self):
         conn_id_col = self.connections[0].index("conn_id")

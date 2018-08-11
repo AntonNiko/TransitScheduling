@@ -15,7 +15,6 @@ class Schedule_Algorithm():
         self.frequency = frequency
         self.priority = priority
 
-
     def arrangeRoutes(self):
         del self.priority[0]
         for priority in self.priority:
@@ -31,16 +30,28 @@ class Schedule_Algorithm():
             priority_min_index = priority_routes_loop.index(min(priority_routes_loop))
             self.routes_order.append(self.priority[priority_min_index][0])
             del self.priority[priority_min_index]
-        
 
     def generateSchedules(self, period="MF"):
-        current_route = self.routes_order[0]
+        for route in self.routes_order:
+            self.generateRouteSchedule(route, period)
+            print("Route: {} -- Trips: {}".format(route, len(self.routes_schedules[route])))
+        print("Schedules created.")
+
+    def evaluateNodeConnections(self):
+        for node in self.nodes:
+            node.evaluateConnectionTime(self.routes_schedules)
+
+    def generateRouteSchedule(self, route, period):
+        current_route = route
         ## Fetches row with frequencies of current route
         current_route_frequency = self.frequency[[route[0] for route in self.frequency].index(current_route)]
         ## Only keeps the elements of frequency that match the schedule period requested (MF/S/Z)
+        ## Find index of first and last hour of period
         header_start_index = self.frequency[0].index("{}00".format(period))
         header_fin_index = self.frequency[0].index("{}23".format(period))
+        ## Fetch the frequencies of the current period
         current_route_frequency = current_route_frequency[header_start_index:(header_fin_index+1)]
+        ## Shift list until first index points at first hour of day for trips
         current_route_frequency = current_route_frequency[self.START_DAY_HOUR:] + current_route_frequency[:self.START_DAY_HOUR]
 
         current_hour = self.START_DAY_HOUR
@@ -74,26 +85,21 @@ class Schedule_Algorithm():
         for route_stop in self.routes_stops[current_route]:
             trip_time+= timedelta(seconds=int(route_stop[1]))
             self.routes_schedules[current_route][trip_id][route_stop[0]] = str(trip_time.time())
-        print(self.routes_schedules[current_route][trip_id])
-            
+
+    def shiftTripTimes(self, trip, seconds):
+        for stop in trip:
+            timeStart = datetime.strptime(trip[stop], "%H:%M:%S")
+            timeFinish = timeStart + timedelta(seconds=int(seconds))
+            trip[stop] = str(timeFinish.time())
+        return trip
+
     def calculateFrequencyMinutes(self, frequency, shift_min):
         if frequency > 60 or frequency < 1:
             return None
-
+        
         minutes = []
         current_min = shift_min
         while current_min < 60:
             minutes.append(current_min)
             current_min+=frequency
         return minutes
-
-        
-            
-        
-            
-        
-         
-
-        
-                       
-        

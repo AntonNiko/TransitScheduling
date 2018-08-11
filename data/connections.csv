@@ -2,6 +2,7 @@ conn_id,conn_name,shape_id,stop_id,conn_time_arr,conn_time_dep
 10000,UVic Exchange,26.2,100889,10,10
 10000,UVic Exchange,12.1,100858,10,10
 10001,University Heights,27.1,100980,5,5
+10001,University Heights,26.1,100988,5,5
 10001,University Heights,26.2,100972,5,5
 10001,University Heights,27.2,100994,5,5
 10001,University Heights,12.1,100965,5,5

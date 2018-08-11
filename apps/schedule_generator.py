@@ -36,6 +36,7 @@ class schedule_generator():
         self.algorithm = Schedule_Algorithm(self.routes, self.buses, self.nodes, self.frequency, self.priority)
         self.algorithm.arrangeRoutes()
         self.algorithm.generateSchedules("MF")
+        self.algorithm.evaluateNodeConnections()
 
     def loadNodes(self):
         conn_id_col = self.connections[0].index("conn_id")
@@ -47,14 +48,18 @@ class schedule_generator():
         del self.connections[0]
 
         current_conn_id = self.connections[0][conn_id_col]
+        current_conn_name = self.connections[0][conn_name_col]
         conn_stops = []
         for conn_row in self.connections:
             if conn_row[conn_id_col] != current_conn_id:
-                current_node = Node(current_conn_id, conn_row[conn_name_col], conn_stops)
+                current_node = Node(current_conn_id, current_conn_name, conn_stops)
                 self.nodes.append(current_node)
                 conn_stops = []
-                current_conn_id = conn_row[conn_id_col]  
+                current_conn_id = conn_row[conn_id_col]
+                current_conn_name = conn_row[conn_name_col]
             conn_stops.append([conn_row[shape_id_col], conn_row[stop_id_col]])
+        ## Generate last node from file
+        current_node = Node(current_conn_id, current_conn_name, conn_stops)
 
     def loadRoutesData(self):
         route_dir = "../" + PROJECT_ROOT_DATA_DIR + "/" + ROUTES_FILE
@@ -99,4 +104,3 @@ class schedule_generator():
                 self.priority.append(row)
 
 gen = schedule_generator()
-

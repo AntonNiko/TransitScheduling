@@ -36,7 +36,7 @@ class schedule_generator():
     def scheduleRoutes(self):
         self.algorithm = Schedule_Algorithm(self.routes, self.buses, self.nodes, self.frequency, self.priority)
         self.algorithm.arrangeRoutes()
-        self.algorithm.generateSchedules("MF")
+        self.algorithm.generateSchedules("S")
         self.algorithm.evaluateNodeConnections()
 
     def saveSchedule(self):

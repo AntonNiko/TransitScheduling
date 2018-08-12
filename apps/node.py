@@ -31,18 +31,20 @@ class Node():
         for connection in self.connections:
             start_stop = connection[0]
             finish_stop = connection[1]
-            print(connection)
+            print("\t",connection)
             for start_trip_id in trips[start_stop[0]]:
                 start_time = trips[start_stop[0]][start_trip_id][start_stop[1]]
-                start_time_formatted = datetime.strptime(start_time, "%H:%M:%S").time()
+                start_time_formatted = datetime.strptime(start_time, "%H:%M:%S")
                 ## Cycle through each departure time of end connection until the next connection
                 ## is found
                 for stop_trip_id in trips[finish_stop[0]]:
                     stop_time = trips[finish_stop[0]][stop_trip_id][finish_stop[1]]
-                    stop_time_formatted = datetime.strptime(stop_time, "%H:%M:%S").time()
+                    stop_time_formatted = datetime.strptime(stop_time, "%H:%M:%S")
                     if stop_time_formatted > start_time_formatted:
                         ## TODO: Catch situations when wait time calculations result in 0
-                        self.total_wait_time+=(stop_time_formatted.minute - start_time_formatted.minute)
+                        self.total_wait_time+=(stop_time_formatted - start_time_formatted).seconds
+                        break
+        print("Total wait time:",self.total_wait_time)
 
                     
                     

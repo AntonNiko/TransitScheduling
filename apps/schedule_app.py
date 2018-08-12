@@ -41,6 +41,9 @@ class Schedule_Algorithm():
         for node in self.nodes:
             node.evaluateConnectionTime(self.routes_schedules)
 
+    def optimizeNodeConnections(self):
+        pass
+
     def generateRouteSchedule(self, route, period):
         current_route = route
         ## Fetches row with frequencies of current route

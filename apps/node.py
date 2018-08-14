@@ -1,17 +1,35 @@
+"""
+Model that represents a Node object. It represents a connection of 2 or more routes that a
+passenger can take. The purpose of a Node is to allow the program to find the most effective
+connections between every route. Provides functions to evaluate the connection time.
+
+"""
 from itertools import permutations
 from datetime import datetime, time, timedelta
 import csv
 
+## Directory where all csv data files are located
 PROJECT_ROOT_DATA_DIR = "data/"
 STOPS_FILE = "stops.csv"
 
 class Node():
+    """
+    Class that represents a node, a set of connections centered at one location.
+
+    Attributes:
+        node_id (str): Node id for identification
+        node_name (str): Name that represents the location of the connection
+        node_stops (list): elements of type (str) that identify each stop for each node
+        connections (list): elements of type (tuple), with each element being a tuple containing
+                            the two stops in each connection
+        total_wait_time (int): Performance variable that represents the total wait time in seconds
+                               for the sume of the connections
+
+    """
     node_id = None
     node_name = None
     node_stops = []
     connections = []
-
-    ## Performance variables
     total_wait_time = 0
     
     def __init__(self, node_id, node_name, node_stops):
@@ -22,26 +40,36 @@ class Node():
         self.generateConnections()
 
     def generateConnections(self):
-        ## Method which generates a connection between every stops in the node
+        """
+        Function that generates the connections for every stop in the node, and stores them
+        in the attribute variable connections.
+        """
+        ## Generate a permutation of every stop pair, and store the converted list
         self.connections = list(permutations(self.node_stops, 2))
 
     def evaluateConnectionTime(self, trips):
-        ## Trip JSON structure: trips[route][trip_id][stop] : time
+        """
+        Function that searches through every trip that passes through the node, and for each
+        trip, searches for the shortest connection to the other routes in the node. Stores the
+        total wait time for each connection in te attribute variable total_wait_time
+        """
         print("Evaluating Node: {} --- {}".format(self.node_id, self.node_name))
+        ## Evaluate the connections for each separate connection
         for connection in self.connections:
+            ## Separate connection list element into obvious variable
             start_stop = connection[0]
             finish_stop = connection[1]
             print("\t",connection)
+            ## Search through each trip in the route that passes through node
             for start_trip_id in trips[start_stop[0]]:
-                start_time = trips[start_stop[0]][start_trip_id][start_stop[1]]
-                start_time_formatted = datetime.strptime(start_time, "%H:%M:%S")
-                ## Cycle through each departure time of end connection until the next connection
-                ## is found
+                ## Time at which bus arrives at node stop
+                start_time_formatted = datetime.strptime(trips[start_stop[0]][start_trip_id][start_stop[1]], "%H:%M:%S")
+                ## Cycle through each departure time of connecting route until the next bus
+                ## is found for a connection
                 for stop_trip_id in trips[finish_stop[0]]:
                     stop_time = trips[finish_stop[0]][stop_trip_id][finish_stop[1]]
                     stop_time_formatted = datetime.strptime(stop_time, "%H:%M:%S")
                     if stop_time_formatted > start_time_formatted:
-                        ## TODO: Catch situations when wait time calculations result in 0
                         self.total_wait_time+=(stop_time_formatted - start_time_formatted).seconds
                         break
         print("Total wait time:",self.total_wait_time)

@@ -7,6 +7,7 @@ class Schedule_Algorithm():
     ## TODO get index for MF, S, Z 
     routes_stops = {}
     routes_schedules = {}
+    routes_schedules_finalized = {}
 
     def __init__(self, routes, buses, nodes, frequency, priority):
         self.routes = routes
@@ -23,16 +24,17 @@ class Schedule_Algorithm():
             self.routes_schedules[priority[0]] = {}
 
         ## Cycle through each route and times
-        priority_routes = self.priority
+        priority_routes = self.priority.copy()
         self.routes_order = []
         for i in range(len(priority_routes)):
             priority_routes_loop = [int(priority[1]) for priority in priority_routes]
             priority_min_index = priority_routes_loop.index(min(priority_routes_loop))
             self.routes_order.append(self.priority[priority_min_index][0])
-            del self.priority[priority_min_index]
+            del priority_routes[priority_min_index]
 
     def generateSchedules(self, period="MF"):
         for route in self.routes_order:
+            self.routes_schedules_finalized[route] = False
             self.generateRouteSchedule(route, period)
             print("Route: {} -- Trips: {}".format(route, len(self.routes_schedules[route])))
         print("Schedules created.")
@@ -42,7 +44,21 @@ class Schedule_Algorithm():
             node.evaluateConnectionTime(self.routes_schedules)
 
     def optimizeNodeConnections(self):
-        pass
+        route_node_numbers = self.calculateNodeNumber().copy()
+        print(self.priority, route_node_numbers)
+
+        priority_routes = self.priority.copy()
+        single_priority = []
+        while True:
+            priority_num = min([e[1] for e in priority_routes])
+            for priority in priority_routes:
+                if priority[1] == priority_num:
+                    single_priority.append(priority[0])
+                    del priority_routes[priority_routes.index(priority)]
+            print(single_priority)
+            
+        
+        
 
     def generateRouteSchedule(self, route, period):
         current_route = route
@@ -106,3 +122,15 @@ class Schedule_Algorithm():
             minutes.append(current_min)
             current_min+=frequency
         return minutes
+
+    def calculateNodeNumber(self):
+        route_node_numbers = {}
+        for route in self.routes_stops:
+            node_num = 0
+            for stop in self.routes_stops[route]:
+                for node in self.nodes:
+                    if stop[0] in [e[1] for e in node.node_stops]:
+                        node_num+=1
+            route_node_numbers[route] = node_num
+        return route_node_numbers
+                        

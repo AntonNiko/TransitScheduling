@@ -70,6 +70,7 @@ class Schedule_Algorithm():
         For each node, print out the resulting performance variables using the currently generated
         schedule.
         """
+        print(self.nodes)
         for node in self.nodes:
             node.evaluateConnectionTime(self.routes_schedules)
 
@@ -82,14 +83,14 @@ class Schedule_Algorithm():
         ## TODO: Finish function
         route_node_numbers = self.calculateNodeNumber().copy()
         priority_routes = self.priority.copy()
-        single_priority = {}
-        while True:
-            priority_num = min([e[1] for e in priority_routes])
-            single_priority[priority_num] = []
-            for priority in priority_routes:
-                if priority[1] == priority_num:
-                    single_priority[priority_num].append(priority[0])
-                    del priority_routes[priority_routes.index(priority)]
+        ## Get a dictionary with each index representing a route's priority, ranging from 1
+        ## (highest priority) to 19 (lowest priority)
+        single_priority = self.getOrderedRoutes(priority_routes)
+
+
+
+
+        print(single_priority)
 
     def generateRouteSchedule(self, route, period):
         """
@@ -214,4 +215,23 @@ class Schedule_Algorithm():
                         node_num+=1
             route_node_numbers[route] = node_num
         return route_node_numbers
+
+    def getOrderedRoutes(self, priority_routes):
+        single_priority = {}
+        priority_num = 1
+        while True:
+            single_priority[priority_num] = []
+            ## Search every element in the routes' priority standing and collect all
+            ## routes with the same highes priority
+            for priority in priority_routes:
+                if int(priority[1]) == priority_num and priority[0] not in single_priority[priority_num]:
+                    single_priority[priority_num].append(priority[0])
+            ## Completed one priority standing, and increment priority_num to search for lower priority
+            priority_num+=1
+
+            ## Set limit of priority to 20 and evaluate condition to break out of loop
+            if priority_num == 20:
+                break
+
+        return single_priority
                         

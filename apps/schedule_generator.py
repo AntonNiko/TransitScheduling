@@ -68,6 +68,7 @@ class schedule_generator():
             conn_stops.append([conn_row[shape_id_col], conn_row[stop_id_col]])
         ## Generate last node from file
         current_node = Node(current_conn_id, current_conn_name, conn_stops)
+        self.nodes.append(current_node)
 
     def loadRoutesData(self):
         route_dir = "../" + PROJECT_ROOT_DATA_DIR + "/" + ROUTES_FILE

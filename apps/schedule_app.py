@@ -48,11 +48,11 @@ class Schedule_Algorithm():
         ## Append in order, the most important routes starting first that will be used to generate schedule
         priority_routes = self.priority.copy()
         self.routes_order = []
+        priority_routes_loop = [int(priority[1]) for priority in priority_routes]
         for i in range(len(priority_routes)):
-            priority_routes_loop = [int(priority[1]) for priority in priority_routes]
             priority_min_index = priority_routes_loop.index(min(priority_routes_loop))
             self.routes_order.append(self.priority[priority_min_index][0])
-            del priority_routes[priority_min_index]
+            priority_routes_loop[priority_min_index] = 20
 
     def generateSchedules(self, period="MF"):
         """
@@ -70,7 +70,6 @@ class Schedule_Algorithm():
         For each node, print out the resulting performance variables using the currently generated
         schedule.
         """
-        print(self.nodes)
         for node in self.nodes:
             node.evaluateConnectionTime(self.routes_schedules)
 
@@ -85,12 +84,7 @@ class Schedule_Algorithm():
         priority_routes = self.priority.copy()
         ## Get a dictionary with each index representing a route's priority, ranging from 1
         ## (highest priority) to 19 (lowest priority)
-        single_priority = self.getOrderedRoutes(priority_routes)
-
-
-
-
-        print(single_priority)
+        single_priority = self.getOrderedRoutes(priority_routes, route_node_numbers)
 
     def generateRouteSchedule(self, route, period):
         """
@@ -216,7 +210,7 @@ class Schedule_Algorithm():
             route_node_numbers[route] = node_num
         return route_node_numbers
 
-    def getOrderedRoutes(self, priority_routes):
+    def getOrderedRoutes(self, priority_routes, route_node_numbers):
         single_priority = {}
         priority_num = 1
         while True:

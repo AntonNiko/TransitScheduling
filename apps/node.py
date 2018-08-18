@@ -57,17 +57,16 @@ class Node():
         ## Evaluate the connections for each separate connection
         for connection in self.connections:
             ## Separate connection list element into obvious variable
-            start_stop = connection[0]
-            finish_stop = connection[1]
-            print("\t",connection)
+            start_route, start_stop = connection[0]
+            finish_route, finish_stop = connection[1]
             ## Search through each trip in the route that passes through node
-            for start_trip_id in trips[start_stop[0]]:
+            for start_trip_id in trips[start_route]:
                 ## Time at which bus arrives at node stop
-                start_time_formatted = datetime.strptime(trips[start_stop[0]][start_trip_id][start_stop[1]], "%H:%M:%S")
+                start_time_formatted = datetime.strptime(trips[start_route][start_trip_id][start_stop], "%H:%M:%S")
                 ## Cycle through each departure time of connecting route until the next bus
                 ## is found for a connection
-                for stop_trip_id in trips[finish_stop[0]]:
-                    stop_time = trips[finish_stop[0]][stop_trip_id][finish_stop[1]]
+                for stop_trip_id in trips[finish_route]:
+                    stop_time = trips[finish_route][stop_trip_id][finish_stop]
                     stop_time_formatted = datetime.strptime(stop_time, "%H:%M:%S")
                     if stop_time_formatted > start_time_formatted:
                         self.total_wait_time+=(stop_time_formatted - start_time_formatted).seconds

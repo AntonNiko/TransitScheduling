@@ -65,26 +65,34 @@ class Schedule_Algorithm():
             print("Route: {} -- Trips: {}".format(route, len(self.routes_schedules[route])))
         print("Schedules created.")
 
-    def evaluateNodeConnections(self):
+    def evaluateNodeConnections(self, route):
         """
         For each node, print out the resulting performance variables using the currently generated
         schedule.
         """
+        route_conn_time = 0
         for node in self.nodes:
-            node.evaluateConnectionTime(self.routes_schedules)
+            conn_times = node.evaluateConnectionTime(self.routes_schedules, route=route)
+            for connection in conn_times:
+                route_conn_time+=conn_times[connection]
+        print(route_conn_time)
+                                                                                                                                                                                              
 
     def optimizeNodeConnections(self):
         """
         Function that optimizes the schedule, by optimizing performance variables for each node.
-        Generates a scehdule for each route, based on its priority, and shifts schedule times for each
+        Generates a schedule for each route, based on its priority, and shifts schedule times for each
         hour in order to accomodate for connecting routes.
         """
-        ## TODO: Finish function
         route_node_numbers = self.calculateNodeNumber().copy()
         priority_routes = self.priority.copy()
         ## Get a dictionary with each index representing a route's priority, ranging from 1
         ## (highest priority) to 19 (lowest priority)
-        single_priority = self.getOrderedRoutes(priority_routes, route_node_numbers)
+        prioritized_routes = self.getOrderedRoutes(priority_routes)
+
+        for priority_category in prioritized_routes:
+            for route in prioritized_routes[priority_category]:
+                self.evaluateNodeConnections(route)
 
     def generateRouteSchedule(self, route, period):
         """
@@ -150,7 +158,14 @@ class Schedule_Algorithm():
             trip_time+= timedelta(seconds=int(route_stop[1]))
             self.routes_schedules[current_route][trip_id][route_stop[0]] = str(trip_time.time())
 
-    def shiftTripTimes(self, trip, seconds):
+    def shiftHourlyTripTimes(self, trips, hour, seconds):
+        """
+        
+        """
+        
+        
+
+    def shiftTripTime(self, trip, seconds):
         """
         Function to shift every stop time by the number of seconds provided. If seconds is negative,
         moves time back, positive moves time forward
@@ -210,7 +225,7 @@ class Schedule_Algorithm():
             route_node_numbers[route] = node_num
         return route_node_numbers
 
-    def getOrderedRoutes(self, priority_routes, route_node_numbers):
+    def getOrderedRoutes(self, priority_routes):
         single_priority = {}
         priority_num = 1
         while True:

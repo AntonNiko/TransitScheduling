@@ -55,8 +55,11 @@ These project only implements default Python modules. The project's folder struc
 ```
 
 **apps**: Contains the pyython scripts at the core of the program's functions, to generate and optimize route schedules
+
 **bctransit-opendata**: Contains the downloaded data from BC Transit, which is used to create formatted data for python scripts [1],[2]
+
 **data**: Contains the formatted data for the python scripts, in a way that reduces the need of data formatting in python scripts
+
 **TransitGUI**: Contains the Java GUI application that displays generated route schedules to drivers
 
 ## Sources

@@ -1,5 +1,63 @@
-# TransitScheduling
+<h1 align="center">
+  Transit Scheduler
+</h1>
 
+
+<p align="center">
+  <a href="#introduction">Introduction</a> •
+  <a href="#structure--use">Structure & Use</a> •
+  <a href="#gallery">Gallery</a> •
+  <a href="#notes">Notes</a> •
+  <a href="#related">Related</a> •
+  <a href="#license">License</a> •
+  <a href="#acknowledgements">Acknowledgements</a> •
+</p>
+
+
+The transit scheduler is a program which creates schedules for the bus network information provided. This project uses Victoria's BC Transit system data [1][2][3], to output a schedule which passengers can use to effectively plan their travels, and minimize waits and missed connections as much as possible.
+
+## Introduction
+
+These project only implements default Python modules. The project's folder structure is built as follows: 
+
+```
+├── apps
+│   ├── document_maker.py 
+│   ├── node.py
+│   ├── routes_kml.py
+│   ├── schedule_app.py
+│   ├── schedule_generator.py
+│   └── schedule_output.json
+├── bctransit-opendata
+│   ├── routes.csv
+│   ├── shapes.csv
+│   ├── stop_times.csv
+│   ├── stops_bctransit.csv
+│   ├── trips.csv
+├── data
+│   ├── buses.csv
+│   ├── connections.csv
+│   ├── frequency.csv
+│   ├── priority.csv
+│   ├── routes.csv
+│   ├── routes_shape.csv
+│   ├── stops.csv
+├── TransitGUI
+│   ├── src
+│   │   ├── **/*.java
+│   ├── json-20180130.jar
+│   ├── .classpath
+│   ├── .gitignore
+│   ├── .project
+├── LICENSE.md
+├── README.md
+└── path.kml
+```
+
+**apps**: Contains the pyython scripts at the core of the program's functions, to generate and optimize route schedules
+**bctransit-opendata**: Contains the downloaded data from BC Transit, which is used to create formatted data for python scripts [1],[2]
+**data**: Contains the formatted data for the python scripts, in a way that reduces the need of data formatting in python scripts
+**TransitGUI**: Contains the Java GUI application that displays generated route schedules to drivers
 
 ## Sources
 

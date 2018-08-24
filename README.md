@@ -5,12 +5,12 @@
 
 <p align="center">
   <a href="#introduction">Introduction</a> •
-  <a href="#structure--use">Structure & Use</a> •
+  <a href="#use">Use</a> •
   <a href="#gallery">Gallery</a> •
   <a href="#notes">Notes</a> •
   <a href="#related">Related</a> •
   <a href="#license">License</a> •
-  <a href="#acknowledgements">Acknowledgements</a> •
+  <a href="#sources">Sources</a> •
 </p>
 
 
@@ -20,7 +20,7 @@ The transit scheduler is a program which creates schedules for the bus network i
 
 These project only implements default Python modules. The project's folder structure is built as follows: 
 
-```
+```bash
 ├── apps
 │   ├── document_maker.py 
 │   ├── node.py
@@ -61,6 +61,18 @@ These project only implements default Python modules. The project's folder struc
 **data**: Contains the formatted data for the python scripts, in a way that reduces the need of data formatting in python scripts
 
 **TransitGUI**: Contains the Java GUI application that displays generated route schedules to drivers
+
+## Use
+
+This program first loads all of the relevant data files from the ```data``` directory, and stores it in the ```schedule_generator``` class. It then initializes the ```Schedule_Algorithm``` class, which organizes each route, generates schedules, and optimizes the schedule to minimize the wait time between each bus trip.
+
+## Gallery 
+
+When the routes and stops are first loaded into the ```Schedule_Algorithm``` class, it calculates the routes simply based on the frequency each route should run at for each hour of the day, and stores it:
+
+![initial route generation](img/init_route_gen.png)
+
+
 
 ## Sources
 

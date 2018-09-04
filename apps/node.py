@@ -58,7 +58,6 @@ class Node():
             total_wait_time (int): Cumulative wait time for each connection during one day
         """
         print("Evaluating Node: {} - Route: {} - {}".format(self.node_id, route, self.node_name))
-        
         ## Evaluate the connections for each separate connection
         total_wait_time = {}
         for connection in self.connections:

@@ -81,8 +81,7 @@ class Schedule_Algorithm():
             conn_times = node.evaluateConnectionTime(self.routes_schedules, route=route)
             for connection in conn_times:
                 route_conn_time+=conn_times[connection]
-        return route_conn_time
-                                                                                                                                                                                              
+        return route_conn_time                                                                                                                                                                                        
 
     def optimizeNodeConnections(self):
         """
@@ -94,12 +93,33 @@ class Schedule_Algorithm():
         priority_routes = self.priority.copy()
         ## Get a dictionary with each index representing a route's priority, ranging from 1
         ## (highest priority) to 19 (lowest priority)
-        print(priority_routes)
         prioritized_routes = self.getOrderedRoutes(priority_routes)
 
         for priority_category in prioritized_routes:
             for route in prioritized_routes[priority_category]:
-                self.evaluateNodeConnections(route)
+                route_conn_time = self.evaluateNodeConnections(route)
+                print("Route {} wait time: {}s".format(route, route_conn_time))
+                self.minimizeRouteWaitTime(route)
+
+    def minimizeRouteWaitTime(self, route):
+        """
+        Function which minimizes the wait time between connections for each separate hour of one day, and
+        repeats the process untile very hour of the day is covered
+
+        Args:
+            route (str): Route and direction of route to be used for minimizing wait time for connections
+        """
+        current_hour = self.START_DAY_HOUR
+        for i in range(24):
+            if current_hour == 24:
+                current_hour = 0
+
+            for trip in self.routes_schedules[route]:
+                trip_start_time = datetime.strptime(list(self.routes_schedules[route][trip].values())[0], "%H:%M:%S")
+                print(trip_start_time.hour)
+
+            current_hour+=1
+        
 
     def generateRouteSchedule(self, route, period):
         """

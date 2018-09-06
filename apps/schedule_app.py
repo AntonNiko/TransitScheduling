@@ -114,7 +114,9 @@ class Schedule_Algorithm():
         """
         ## Dictionary containing the trips for specified route and hour to shift
         trips_selected = {}
+        time_efficiency = []
         current_hour = START_DAY_HOUR
+        ## Minimize the wait times in terms of each hour of the day
         for i in range(24):
             if current_hour == 24:
                 current_hour = 0
@@ -122,10 +124,15 @@ class Schedule_Algorithm():
             print("Minimizing wait time for route {} @ hour {}".format(route, current_hour))
 
             seconds_shift = TIME_SHIFT_MIN * 60
+            ## Test a range of time shifts and append the connection wait times for evaluation
             for current_shift in range(-seconds_shift, seconds_shift+60, 60):
                 print("Shifting route {} hour {} by {}s".format(route, current_hour, current_shift))
-                ##self.shiftHourlyTripTimes(route, current_hour, seconds_shift)
-
+                self.shiftHourlyTripTimes(route, current_hour, current_shift)
+                time_efficiency.append(self.evaluateNodeConnections(route))
+                self.shiftHourlyTripTimes(route, current_hour, -current_shift)
+            ## Evaluate the wait times, and select the most time efficient shift
+            best_timeshift_index = time_efficiency.index(min(time_efficiency))
+            ## TODO: Finish
             current_hour+=1
         
 
@@ -206,18 +213,16 @@ class Schedule_Algorithm():
         """
         ## Dictionary containing the trips for specified route and hour to shift
         trips_selected = {}
-        current_hour = self.START_DAY_HOUR
         ## Add all the trips that start during current hour to shift and replace
         for trip in self.routes_schedules[route]:
             trip_start_time = datetime.strptime(list(self.routes_schedules[route][trip].values())[0], "%H:%M:%S")
-            if trip_start_time.hour == current_hour:
+            if trip_start_time.hour == hour:
                 trips_selected[trip] = self.routes_schedules[route][trip]
             
         ## Shift each selected trip time and store result in original list
         for trip in trips_selected:
-            self.routes_schedules[route][trip] = self.shiftTripTime(trip, seconds)      
+            self.routes_schedules[route][trip] = self.shiftTripTime(trips_selected[trip], seconds)      
         
-
     def shiftTripTime(self, trip, seconds):
         """
         Function to shift every stop time by the number of seconds provided. If seconds is negative,

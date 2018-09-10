@@ -2,6 +2,7 @@
 Script which manages the process of generating schedules, optimizing schedule times, and provides
 a set of utility functions to interact with data. 
 """
+import time as t
 import numpy as np
 import random
 from datetime import datetime, time, timedelta
@@ -80,10 +81,9 @@ class Schedule_Algorithm():
             route (str): Route used to evaluate the wait time for each connection in that route
         """
         route_conn_time = 0
+        t1 = t.clock()
         for node in self.nodes:
-            conn_times = node.evaluateConnectionTime(self.routes_schedules, route=route)
-            for connection in conn_times:
-                route_conn_time+=conn_times[connection]
+            route_conn_time+=node.evaluateConnectionTime(self.routes_schedules, route)
         return route_conn_time                                                                                                                                                                                        
 
     def optimizeNodeConnections(self):
@@ -122,17 +122,18 @@ class Schedule_Algorithm():
                 current_hour = 0
                 
             print("Minimizing wait time for route {} @ hour {}".format(route, current_hour))
-
             seconds_shift = TIME_SHIFT_MIN * 60
             ## Test a range of time shifts and append the connection wait times for evaluation
             for current_shift in range(-seconds_shift, seconds_shift+60, 60):
-                print("Shifting route {} hour {} by {}s".format(route, current_hour, current_shift))
+                ##print("Shifting route {} hour {} by {}s".format(route, current_hour, current_shift))
                 self.shiftHourlyTripTimes(route, current_hour, current_shift)
                 time_efficiency.append(self.evaluateNodeConnections(route))
                 self.shiftHourlyTripTimes(route, current_hour, -current_shift)
-            ## Evaluate the wait times, and select the most time efficient shift
+            ## Evaluate wait times, select the most time efficient shift, and permanently shift trips
             best_timeshift_index = time_efficiency.index(min(time_efficiency))
-            ## TODO: Finish
+            best_timeshift = (-seconds_shift + 60*best_timeshift_index)
+            self.shiftHourlyTripTimes(route, current_hour, best_timeshift)
+            print("Shifted time by {}".format(best_timeshift))
             current_hour+=1
         
 

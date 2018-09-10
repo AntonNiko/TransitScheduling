@@ -4,6 +4,7 @@ passenger can take. The purpose of a Node is to allow the program to find the mo
 connections between every route. Provides functions to evaluate the connection time.
 
 """
+import time as t
 from itertools import permutations
 from datetime import datetime, time, timedelta
 import csv
@@ -45,8 +46,9 @@ class Node():
         """
         ## Generate a permutation of every stop pair, and store the converted list
         self.connections = list(permutations(self.node_stops, 2))
+        print(self.connections)
 
-    def evaluateConnectionTime(self, trips, hour=None, route=None):
+    def evaluateConnectionTime(self, trips, route, hour=None):
         """
         Function that searches through every trip that passes through the node, and for each
         trip, searches for the shortest connection to the other routes in the node. Stores the
@@ -57,20 +59,14 @@ class Node():
         Returns:
             total_wait_time (int): Cumulative wait time for each connection during one day
         """
-        print("Evaluating Node: {} - Route: {} - {}".format(self.node_id, route, self.node_name))
         ## Evaluate the connections for each separate connection
-        total_wait_time = {}
-        for connection in self.connections:
+        total_wait_time = 0
+        
+        for connection in [c for c in self.connections if (c[0][0]==route or c[1][0]==route)]:
             ## Separate connection list element into obvious variable
             start_route, start_stop = connection[0]
             finish_route, finish_stop = connection[1]
-            ## If a route is provided and the connection does not include that route, skip connection
-            if (route is not None) and (route!=start_route and route!=finish_route):
-                continue
-
-            connection_string = start_route+"-"+finish_route
-            total_wait_time[connection_string] = 0
-            
+                           
             ## Search through each trip in the route that passes through node
             for start_trip_id in trips[start_route]:
                 ## Time at which bus arrives at node stop
@@ -80,12 +76,9 @@ class Node():
                 for stop_trip_id in trips[finish_route]: 
                     stop_time = datetime.strptime(trips[finish_route][stop_trip_id][finish_stop], "%H:%M:%S")
                     if stop_time > start_time:
-                        total_wait_time[connection_string]+=(stop_time - start_time).seconds
+                        total_wait_time+=(stop_time - start_time).seconds
                         break
         return total_wait_time
-
-                    
-                    
                 
             
         
